@@ -1,4 +1,4 @@
- JobMitra is a Web Application built for seamless interaction between Students and Recruiters.
+JobMitra is a Web Application built for seamless interaction between Students and Recruiters.
 
 Students can search and apply for jobs, update their profile and resume, and track job application statuses.
 
@@ -33,7 +33,6 @@ Access student resumes.
 🔍 Common Features
 
 Job filtering based on location and role.
-
 Secure authentication for both roles.
 
 Responsive frontend for better user experience.
