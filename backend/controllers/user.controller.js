@@ -11,7 +11,6 @@ dotenv.config({});
 export const register = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, password, role } = req.body;
-    
 
     if (!fullname || !email || !phoneNumber || !password || !role) {
       return res.status(400).json({
@@ -20,13 +19,13 @@ export const register = async (req, res) => {
       });
     }
     const file = req.file;
-    const fileuri=getDataUri(file);
+    const fileuri = getDataUri(file);
 
-    const cloudinaryResponse =await  cloudinary.uploader.upload(fileuri.content);
-   
+    const cloudinaryResponse = await cloudinary.uploader.upload(
+      fileuri.content
+    );
 
     const user = await User.findOne({ email });
-    
 
     if (user) {
       return res.status(400).json({
@@ -34,7 +33,7 @@ export const register = async (req, res) => {
         success: false,
       });
     }
-     //console.log(fullname, email, phoneNumber, password, role );
+    //console.log(fullname, email, phoneNumber, password, role );
 
     const hashedPassword = await bcrypt.hash(password, 10);
     //create operation
@@ -44,9 +43,9 @@ export const register = async (req, res) => {
       phoneNumber,
       password: hashedPassword,
       role,
-      profile:{
-        profilePhoto:cloudinaryResponse.secure_url,
-      }
+      profile: {
+        profilePhoto: cloudinaryResponse.secure_url,
+      },
     });
     return res.status(201).json({
       message: "Account created successully",
@@ -60,7 +59,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
-   // console.log( email, password, role);
+    // console.log( email, password, role);
     if (!email || !password || !role) {
       return res.status(400).json({
         message: "Something is missing",
@@ -113,12 +112,12 @@ export const login = async (req, res) => {
         maxAge: 1 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         sameSite: "lax",
-        secure:false,
+        secure: false,
       })
       .json({
         message: `welcome back ${user.fullname}`,
         user,
-      
+
         success: true,
       });
   } catch (error) {
@@ -142,7 +141,6 @@ export const updateProfile = async (req, res) => {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
     const file = req.file;
 
-  
     let skillsArray;
     if (skills) {
       skillsArray = skills.split(",");
@@ -164,7 +162,6 @@ export const updateProfile = async (req, res) => {
     if (bio) user.profile.bio = bio;
     if (skills) user.profile.skills = skillsArray;
 
- 
     if (file) {
       const fileUri = getDataUri(file);
       const cloudResponse = await cloudinary.uploader.upload(fileUri.content);

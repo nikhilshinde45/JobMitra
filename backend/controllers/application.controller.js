@@ -48,7 +48,6 @@ export const applyjob = async (req, res) => {
     return res.status(201).json({
       message: "Job applied successfully",
       success: true,
-     
     });
   } catch (error) {
     console.log(error);
@@ -56,7 +55,7 @@ export const applyjob = async (req, res) => {
 };
 
 //find jobs
-//student checks which job they hava applied 
+//student checks which job they hava applied
 export const getAppliedjobs = async (req, res) => {
   try {
     const userId = req.id;
@@ -134,7 +133,7 @@ export const updateStatus = async (req, res) => {
     if (!application) {
       return res.status(404).json({
         message: "Application not found",
-        success:false
+        success: false,
       });
     }
 

@@ -83,14 +83,15 @@ export const getCompanyById = async (req, res) => {
 export const updateCompany = async (req, res) => {
   try {
     const { name, description, website, location } = req.body;
-    //cloudinary here
-    //console.log({ name, description, website, location });
-     let logo; // optional logo update
+ 
+    let logo; 
 
     if (req.file) {
       // only if a new file is uploaded
       const fileuri = getDataUri(req.file);
-      const cloudinaryResponse = await cloudinary.uploader.upload(fileuri.content);
+      const cloudinaryResponse = await cloudinary.uploader.upload(
+        fileuri.content
+      );
       logo = cloudinaryResponse.secure_url;
     }
 
@@ -99,7 +100,7 @@ export const updateCompany = async (req, res) => {
       description,
       website,
       location,
-      ...(logo && { logo }) 
+      ...(logo && { logo }),
     };
     const company = await Company.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
