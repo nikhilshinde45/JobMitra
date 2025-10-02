@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: `https://jobmitra-frontend.onrender.com/`,
+  origin: `https://jobmitra-frontend.onrender.com`,
   credentials: true,
 };
 app.use(cors(corsOptions));
