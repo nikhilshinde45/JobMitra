@@ -15,26 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use(cors({ origin: "*", credentials: true }));
 
-const allowedOrigins = [
-  "http://localhost:5173",                     // local frontend
-  "https://jobmitra-frontend.onrender.com"    // deployed frontend
-];
-
-const corsOptions = {
-  origin: function(origin, callback) {
-    // allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  credentials: true
-};
-
-app.use(cors(corsOptions));
 
 
 //API
