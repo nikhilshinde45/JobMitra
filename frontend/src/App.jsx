@@ -17,7 +17,7 @@ import About from "./components/About"
 
 export default function App() {
   return (
-    <BrowserRouter>
+ 
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -38,6 +38,6 @@ export default function App() {
 
       </Routes>
     </Router>
-    </BrowserRouter>
+   
   )
 }
