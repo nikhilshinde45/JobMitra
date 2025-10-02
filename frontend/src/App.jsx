@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom"
 import Home from "./components/Home"
 import Login from "./components/auth/Login"
 import Signup from "./components/auth/Signup"
@@ -17,6 +17,7 @@ import About from "./components/About"
 
 export default function App() {
   return (
+    <BrowserRouter>
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -37,5 +38,6 @@ export default function App() {
 
       </Routes>
     </Router>
+    </BrowserRouter>
   )
 }
