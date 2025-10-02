@@ -22,17 +22,21 @@ const allowedOrigins = [
 ];
 
 const corsOptions = {
-  origin: function(origin, callback) {
-    // allow requests with no origin (like Postman)
+  origin: function (origin, callback) {
+    // Allow Postman/undefined origin
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
-      return callback(new Error(msg), false);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(
+        new Error("Not allowed by CORS: " + origin),
+        false
+      );
     }
-    return callback(null, true);
   },
-  credentials: true
+  credentials: true,
 };
+
 
 app.use(cors(corsOptions));
 
