@@ -21,9 +21,16 @@ const Navbar = () => {
   const navigate = useNavigate();
   const logoutHandler = async (e) => {
     e.preventDefault();
+
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.log("No token found, user not authenticated");
+        return;
+      }
       const res = await axios.get(`${USER_API_END_POINT}/logout`, {
-        withCredentials: true,
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {
         dispatch(setUser(null));
@@ -41,7 +48,7 @@ const Navbar = () => {
       <div className="flex items-center justify-between h-16 px-6 mx-auto text-white max-w-7xl">
         {/* Logo */}
         <div>
-          <h1  className="text-2xl font-bold tracking-wide">
+          <h1 className="text-2xl font-bold tracking-wide">
             Job<span className="text-[#FBBF24]">Mitra</span>
           </h1>
         </div>
@@ -136,21 +143,17 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {
-                  user&&user.role==='student'&&(
-                    
-                     <div className="mt-4 space-y-2">
-                  <a
-                    href="/profile"
-                    className="flex items-center gap-2 text-gray-700 hover:text-[#6A38C2] transition duration-200"
-                  >
-                    <User2 size={18} />
-                    View Profile
-                  </a>
+                {user && user.role === "student" && (
+                  <div className="mt-4 space-y-2">
+                    <a
+                      href="/profile"
+                      className="flex items-center gap-2 text-gray-700 hover:text-[#6A38C2] transition duration-200"
+                    >
+                      <User2 size={18} />
+                      View Profile
+                    </a>
                   </div>
-                    
-                  )
-                }
+                )}
 
                 {/* Links */}
                 <div className="mt-4 space-y-2">
