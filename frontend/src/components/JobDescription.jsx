@@ -16,11 +16,11 @@ import { toast } from "sonner";
 const JobDescription = () => {
   const params = useParams();
   const jobId = params.id;
-//  console.log(jobId);
+  //  console.log(jobId);
   const { singleJob } = useSelector((store) => store.job);
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
-//This is used only once at the very beginning when the component mounts.
+  //This is used only once at the very beginning when the component mounts.
   const isInitiallyApplied =
     singleJob?.applications?.some(
       (application) => application.applicant === user?._id
@@ -38,17 +38,26 @@ const JobDescription = () => {
 
   const appliHandler = async () => {
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.log("No token found, user not authenticated");
+        return;
+      }
+
       const res = await axios.post(
         `${APPLICATION_API_END_POINT}/apply/${jobId}`,
         {},
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ fixed
+          },
+        }
       );
-      // console.log(res.data);
+
       if (res.data.success) {
-        setIsApplied(true); //update the locals tate
-        //duplicating and making changes needed
-        //Creates an updated version of singleJob, adding this user to the applications list.
-        
+        setIsApplied(true);
+
         const updateSingleJob = {
           ...singleJob,
           applications: [
@@ -56,36 +65,45 @@ const JobDescription = () => {
             { applicant: user._id },
           ],
         };
-        //
-        dispatch(setSingleJob(updateSingleJob)); //heps us to real time ui update
+
+        dispatch(setSingleJob(updateSingleJob));
         toast.success(res.data.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
-//this runs first
+  //this runs first
   useEffect(() => {
     const fetchSingleJobs = async () => {
       try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.log("No token found, user not authenticated");
+          return;
+        }
+
         const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, {
-         headers:{
-              Authorization: `Bearer ${token}`
-         }
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ fixed
+          },
         });
+
         if (res.data.success) {
           dispatch(setSingleJob(res.data.jobs));
           setIsApplied(
             res.data.jobs?.applications?.some(
               (application) => application.applicant === user?._id
             )
-          ); //ensure the state is synced with fetched data
+          );
         }
       } catch (error) {
         console.log(error);
       }
     };
+
     fetchSingleJobs();
   }, [jobId, dispatch, user?._id]);
 
@@ -151,7 +169,7 @@ const JobDescription = () => {
           <p className="text-lg font-semibold">
             Experience:{" "}
             <span className="font-normal text-gray-600">
-              {singleJob?.experienceLevel}   yrs
+              {singleJob?.experienceLevel} yrs
             </span>
           </p>
           <p className="text-lg font-semibold">
