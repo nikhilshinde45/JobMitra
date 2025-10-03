@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 // CORS
 const allowedOrigins = [
-  'https://jobmitra-frontend.onrender.com'
+  'https://jobmitra-frontend-v2o0.onrender.com'
 ];
 
 app.use(cors({
