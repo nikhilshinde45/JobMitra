@@ -106,13 +106,12 @@ export const login = async (req, res) => {
       role: user.role,
       profile: user.profile,
     };
-  return res.status(200).json({
-  message: `Welcome back ${user.fullname}`,
-  user,
-  token,
-  success: true,
-});
-
+    return res.status(200).json({
+      message: `Welcome back ${user.fullname}`,
+      user,
+      token,
+      success: true,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -120,12 +119,16 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    return res.status(200).cookie("token", "", { maxAge: 0 }).json({
-      message: "log out successfully",
+    return res.status(200).json({
+      message: "Log out successfully",
       success: true,
     });
   } catch (error) {
     console.log(error);
+    return res.json.status(500).json({
+      message: "Logout failed",
+      success: false,
+    });
   }
 };
 

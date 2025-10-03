@@ -33,8 +33,9 @@ const Navbar = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {
+         localStorage.removeItem("token");
         dispatch(setUser(null));
-        navigate("/");
+        navigate("/login");
         toast.success(res.data.message);
       }
     } catch (error) {
