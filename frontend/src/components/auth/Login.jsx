@@ -33,12 +33,13 @@ const Login = () => {
     try {
       dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
       if (res.data.success) {
+          localStorage.setItem("token", res.data.token);
+
         dispatch(setUser(res.data.user));
         navigate("/");
         toast.success(res.data.message);
