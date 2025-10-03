@@ -12,12 +12,14 @@ const useGetAllJobs = () => {
     const fetchAllJobs = async () => {
       try {
         const token = localStorage.getItem("token"); 
+        console.log(token);
 
         const res = await axios.get(
           `${JOB_API_END_POINT}/get?keyword=${encodeURIComponent(searchedQuery ?? "")}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, 
+              Authorization: `Bearer ${token}`,
+               
               "Content-Type": "application/json"
             }
           }
