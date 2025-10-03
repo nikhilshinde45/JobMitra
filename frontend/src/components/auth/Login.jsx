@@ -26,70 +26,70 @@ const Login = () => {
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-  //   const submitHandler = async (e) => {
-  //     e.preventDefault();
-  //     try {
-  //       dispatch(setLoading(true));
-  //       const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // console.log("Hi");
-  // console.log(res.token);
-  //       if (res.success) {
-  //         console.log(res.token);
-  //           localStorage.setItem("token", res.token);
+    const submitHandler = async (e) => {
+      e.preventDefault();
+      try {
+        dispatch(setLoading(true));
+        const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  console.log("Hi");
+  console.log(res.token);
+        if (res.data.success) {
+          console.log(res.token);
+            localStorage.setItem("token", res.data.token);
 
-  //         dispatch(setUser(res.user));
-  //         navigate("/");
-  //         toast.success(res.message);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //       toast.error(error.response.message);
-  //     } finally {
-  //       dispatch(setLoading(false));
-  //     }
-  //   };
-
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      dispatch(setLoading(true));
-
-      // Create request config similar to your JSON format
-      const requestConfig = {
-        method: "POST",
-        url: `${USER_API_END_POINT}/login`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: {
-          email: input.email,
-          password: input.password,
-          role: input.role,
-        },
-      };
-
-      const res = await axios(requestConfig);
-      const data = res.data;
-
-      if (data.success) {
-        localStorage.setItem("token", data.token);
-        dispatch(setUser(data.user));
-        navigate("/");
-        toast.success(data.message);
-      } else {
-        toast.error(data.message || "Login failed");
+          dispatch(setUser(res.data.user));
+          navigate("/");
+          toast.success(res.data.message);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error(error.data.response.message);
+      } finally {
+        dispatch(setLoading(false));
       }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response?.data?.message || error.message);
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
+    };
+
+  // const submitHandler = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     dispatch(setLoading(true));
+
+  //     // Create request config similar to your JSON format
+  //     const requestConfig = {
+  //       method: "POST",
+  //       url: `${USER_API_END_POINT}/login`,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       data: {
+  //         email: input.email,
+  //         password: input.password,
+  //         role: input.role,
+  //       },
+  //     };
+
+  //     const res = await axios(requestConfig);
+  //     const data = res.data;
+
+  //     if (data.success) {
+  //       localStorage.setItem("token", data.token);
+  //       dispatch(setUser(data.user));
+  //       navigate("/");
+  //       toast.success(data.message);
+  //     } else {
+  //       toast.error(data.message || "Login failed");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error.response?.data?.message || error.message);
+  //   } finally {
+  //     dispatch(setLoading(false));
+  //   }
+  // };
 
   useEffect(() => {
     if (user) {
