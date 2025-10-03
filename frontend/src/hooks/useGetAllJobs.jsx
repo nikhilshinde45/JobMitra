@@ -11,25 +11,32 @@ const useGetAllJobs = () => {
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
-        const token = localStorage.getItem("token"); 
-        console.log(token);
+        // Get token from localStorage
+        const token = localStorage.getItem("token");
 
+        if (!token) {
+          console.log("No token found, user not authenticated");
+          return;
+        }
+
+       
         const res = await axios.get(
           `${JOB_API_END_POINT}/get?keyword=${encodeURIComponent(searchedQuery ?? "")}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
-               
-              "Content-Type": "application/json"
-            }
+              Authorization: `Bearer ${token}`, 
+              "Content-Type": "application/json",
+            },
           }
         );
 
         if (res.data.success) {
           dispatch(setAllJobs(res.data.jobs));
+        } else {
+          console.log("No jobs found or request failed:", res.data);
         }
       } catch (error) {
-        console.log("fetchAllJobs error:", error);
+        console.log("fetchAllJobs error:", error.response?.data || error.message);
       }
     };
 

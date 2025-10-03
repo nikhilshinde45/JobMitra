@@ -12,8 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setUser } from "../../redux/authSlice";
 import store from "../../redux/store";
 
-
-
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -22,41 +20,82 @@ const Login = () => {
     password: "",
     role: "", // added role for radio buttons
   });
-  const { loading,user } = useSelector((store) => store.auth);
+  const { loading, user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
+  //   const submitHandler = async (e) => {
+  //     e.preventDefault();
+  //     try {
+  //       dispatch(setLoading(true));
+  //       const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // });
+  // console.log("Hi");
+  // console.log(res.token);
+  //       if (res.success) {
+  //         console.log(res.token);
+  //           localStorage.setItem("token", res.token);
+
+  //         dispatch(setUser(res.user));
+  //         navigate("/");
+  //         toast.success(res.message);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //       toast.error(error.response.message);
+  //     } finally {
+  //       dispatch(setLoading(false));
+  //     }
+  //   };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
       dispatch(setLoading(true));
-      const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-      if (res.data.success) {
-          localStorage.setItem("token", res.data.token);
 
-        dispatch(setUser(res.data.user));
+      // Create request config similar to your JSON format
+      const requestConfig = {
+        method: "POST",
+        url: `${USER_API_END_POINT}/login`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          email: input.email,
+          password: input.password,
+          role: input.role,
+        },
+      };
+
+      const res = await axios(requestConfig);
+      const data = res.data;
+
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        dispatch(setUser(data.user));
         navigate("/");
-        toast.success(res.data.message);
+        toast.success(data.message);
+      } else {
+        toast.error(data.message || "Login failed");
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || error.message);
     } finally {
       dispatch(setLoading(false));
     }
   };
 
-   useEffect(()=>{
-      if(user){
-        navigate("/");
-      }
-   },[])
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
       <Navbar />
@@ -166,7 +205,7 @@ const Login = () => {
           {loading ? (
             <Button className="w-full my-4">
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-             Please wait
+              Please wait
             </Button>
           ) : (
             <Button
