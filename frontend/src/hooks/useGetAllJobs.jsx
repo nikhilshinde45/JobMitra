@@ -11,10 +11,15 @@ const useGetAllJobs = () => {
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
-        
         const res = await axios.get(
           `${JOB_API_END_POINT}/get?keyword=${encodeURIComponent(searchedQuery ?? "")}`,
-          { withCredentials: true }
+          {
+            headers: {
+              Authorization: "Bearer DcYceMcZ7kY7sddXIgeO",
+              "Content-Type": "application/json"
+            },
+            withCredentials: true
+          }
         );
         if (res.data.success) {
           dispatch(setAllJobs(res.data.jobs));
@@ -23,9 +28,8 @@ const useGetAllJobs = () => {
         console.log("fetchAllJobs error:", error);
       }
     };
-
     fetchAllJobs();
-  }, [searchedQuery, dispatch]); // fetch whenever searchedQuery changes
+  }, [searchedQuery, dispatch]);
 };
 
 export default useGetAllJobs;
