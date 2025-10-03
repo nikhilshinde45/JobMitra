@@ -18,14 +18,20 @@ const CompanyCreate = () => {
 
   const registerNewCompany = async () => {
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.log("No token found, user not authenticated");
+        return;
+      }
       const res = await axios.post(
         `${COMPANY_API_END_POINT}/register`,
         { companyName },
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-          withCredentials: true,
         }
       );
 
@@ -56,7 +62,7 @@ const CompanyCreate = () => {
             Create Your Company 🚀
           </h1>
           <p className="mt-3 text-lg text-gray-500">
-            Give your company a name to get started.  
+            Give your company a name to get started.
             <span className="block">Don’t worry, you can change it later.</span>
           </p>
         </div>

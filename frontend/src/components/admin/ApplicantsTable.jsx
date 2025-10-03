@@ -22,23 +22,31 @@ const ApplicantsTable = () => {
   const { applicants } = useSelector((store) => store.application);
 
   //update status
-  const params=useParams();
-  const appId=params.id;
-  const statusHandler = async(status,id)=>{
-    try{
+  const params = useParams();
+  const appId = params.id;
+  const statusHandler = async (status, id) => {
+    try {
+      const token = localStorage.getItem("token");
 
-      const res= await axios.post(`${APPLICATION_API_END_POINT}/status/${id}/update`,{status},{
-        withCredentials:true
-      });
-      if(res.data.success){
+      if (!token) {
+        console.log("No token found, user not authenticated");
+        return;
+      }
+      const res = await axios.post(
+        `${APPLICATION_API_END_POINT}/status/${id}/update`,
+        { status },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (res.data.success) {
         toast.success(res.data.message);
       }
-      
-    }catch(error){
+    } catch (error) {
       console.log(error);
       toast.error(error.res.data.messaage);
     }
-  }
+  };
 
   return (
     <div>
@@ -86,7 +94,8 @@ const ApplicantsTable = () => {
                     <PopoverContent className="w-32">
                       {shortlistingStatus.map((status, index) => {
                         return (
-                          <div onClick={()=>statusHandler(status,item?._id)} 
+                          <div
+                            onClick={() => statusHandler(status, item?._id)}
                             key={index}
                             className="flex items-center my-2 cursor-pointer w-fit"
                           >

@@ -26,9 +26,9 @@ const CompanySetup = () => {
   const dispatch = useDispatch();
   const param = useParams();
   const companyId = param.id;
-  
+
   useGetCompanyById(companyId);
-  
+
   const { singleCompany } = useSelector((store) => store.company);
 
   const changeEventHandler = (e) => {
@@ -52,14 +52,20 @@ const CompanySetup = () => {
     }
     try {
       dispatch(setLoading(true));
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.log("No token found, user not authenticated");
+        return;
+      }
       const res = await axios.put(
         `${COMPANY_API_END_POINT}/update/${companyId}`,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
-          withCredentials: true,
         }
       );
       if (res.data.success) {
