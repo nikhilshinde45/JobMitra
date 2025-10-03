@@ -35,10 +35,10 @@ const Login = () => {
       "Content-Type": "application/json",
     },
   });
-  console.log("Hi");
-  console.log(res.token);
+  // console.log("Hi");
+  // console.log(res.token);
         if (res.data.success) {
-          console.log(res.token);
+          //console.log(res.token);
             localStorage.setItem("token", res.data.token);
 
           dispatch(setUser(res.data.user));
