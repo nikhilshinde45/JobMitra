@@ -9,8 +9,13 @@ const useGetAllCompanies = async () => {
   useEffect(()=>{
     const fetchAllCompanies = async()=>{
       try{
+         const token = localStorage.getItem("token");
 
-        const res=await axios.get(`${COMPANY_API_END_POINT}/get`,{withCredentials:true});
+        if (!token) {
+          console.log("No token found, user not authenticated");
+          return;
+        }
+        const res=await axios.get(`${COMPANY_API_END_POINT}/get`,{headers:{ Authorization: `Bearer ${token}`}});
         if(res.data.success){
           dispatch(setCompanies(res.data.companies));
 

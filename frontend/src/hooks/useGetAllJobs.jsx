@@ -1,8 +1,8 @@
-import { setAllJobs } from '../redux/jobSlice';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { JOB_API_END_POINT } from '../utils/constant';
-import axios from 'axios';
+import { setAllJobs } from "../redux/jobSlice";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { JOB_API_END_POINT } from "../utils/constant";
+import axios from "axios";
 
 const useGetAllJobs = () => {
   const dispatch = useDispatch();
@@ -19,12 +19,13 @@ const useGetAllJobs = () => {
           return;
         }
 
-       
         const res = await axios.get(
-          `${JOB_API_END_POINT}/get?keyword=${encodeURIComponent(searchedQuery ?? "")}`,
+          `${JOB_API_END_POINT}/get?keyword=${encodeURIComponent(
+            searchedQuery ?? ""
+          )}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, 
+              Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
           }
@@ -36,7 +37,10 @@ const useGetAllJobs = () => {
           console.log("No jobs found or request failed:", res.data);
         }
       } catch (error) {
-        console.log("fetchAllJobs error:", error.response?.data || error.message);
+        console.log(
+          "fetchAllJobs error:",
+          error.response?.data || error.message
+        );
       }
     };
 
