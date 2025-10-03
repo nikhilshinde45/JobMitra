@@ -11,16 +11,18 @@ const useGetAllJobs = () => {
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
+        const token = localStorage.getItem("token"); 
+
         const res = await axios.get(
           `${JOB_API_END_POINT}/get?keyword=${encodeURIComponent(searchedQuery ?? "")}`,
           {
             headers: {
-              Authorization: "Bearer DcYceMcZ7kY7sddXIgeO",
+              Authorization: `Bearer ${token}`, 
               "Content-Type": "application/json"
-            },
-            withCredentials: true
+            }
           }
         );
+
         if (res.data.success) {
           dispatch(setAllJobs(res.data.jobs));
         }
@@ -28,6 +30,7 @@ const useGetAllJobs = () => {
         console.log("fetchAllJobs error:", error);
       }
     };
+
     fetchAllJobs();
   }, [searchedQuery, dispatch]);
 };
