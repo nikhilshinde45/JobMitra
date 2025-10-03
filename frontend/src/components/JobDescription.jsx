@@ -50,7 +50,7 @@ const JobDescription = () => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // ✅ fixed
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -87,7 +87,7 @@ const JobDescription = () => {
 
         const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, {
           headers: {
-            Authorization: `Bearer ${token}`, // ✅ fixed
+            Authorization: `Bearer ${token}`,
           },
         });
 
